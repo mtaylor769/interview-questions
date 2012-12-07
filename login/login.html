@@ -17,11 +17,11 @@
 <form method=POST action=>
 
   <fieldset>
-    <label>Username</label>
-    <input type=text />
+    <label for=username>Username</label>
+    <input type=text name=username id=username placeholder=max />
 
-    <label>Password</label>
-    <input type=password />
+    <label for=passwd>Password</label>
+    <input type=password name=passwd id=passwd placeholder=password />
   </fieldset>
 
   <button type=submit>Login</button>
@@ -38,6 +38,35 @@
 - http://interview-py.dev for Python
 
 */
+
+$('form').submit(function(e) {
+  // don't go anywhere
+  e.preventDefault();
+
+  // hide any previous errors
+  $('.alert-error').hide();
+  $('.error').removeClass('error');
+
+  // lang agnostic
+  url = $(this).attr('action');
+
+  .post({
+    url
+    $('form').serialize()
+    function(data) {
+      if (data.success) {
+        $('.alert-success').show();
+      } else {
+        // show error message
+        $('.alert-error').show();
+        // highlight erroneous fields
+        data.errors.forEach(function(element) {
+          $('#' + element).addClass('error');
+        })
+      }
+    }
+  });
+});
 </script>
 
 <!-- 4. process in language of your choice (e.g. login.php) -->
