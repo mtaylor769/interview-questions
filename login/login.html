@@ -50,9 +50,9 @@ $('form').submit(function(e) {
   // lang agnostic
   url = $(this).attr('action');
 
-  .post({
-    url
-    $('form').serialize()
+  .post(
+    url,
+    $('form').serialize(),
     function(data) {
       if (data.success) {
         $('.alert-success').show();
@@ -65,7 +65,7 @@ $('form').submit(function(e) {
         })
       }
     }
-  });
+  );
 });
 </script>
 
