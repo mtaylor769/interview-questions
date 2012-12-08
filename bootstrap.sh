@@ -1,11 +1,6 @@
-# Setup PHP
-
-# Setup Sinatra
-
-# Setup
-# http://www.quora.com/Whats-a-good-Python-equivalent-to-Rubys-Sinatra
-
 #!/bin/bash
+
+# TODO: http://www.quora.com/Whats-a-good-Python-equivalent-to-Rubys-Sinatra
 
 # copy interview-questions.conf
 sudo cp `pwd`/bootstrap/interview-questions.conf /private/etc/apache2/other/interview-questions.conf
@@ -13,7 +8,8 @@ sudo cp `pwd`/bootstrap/interview-questions.conf /private/etc/apache2/other/inte
 ROOT_DIR=`pwd`
 ROOT_DIR=${ROOT_DIR//\//\\\/}
 
-sudo sed -ie s/%%PWD%%/$ROOT_DIR/g /private/etc/apache2/other/interview-questions.conf
+sudo sed -i.bak -e s/%%PWD%%/$ROOT_DIR/g /private/etc/apache2/other/interview-questions.conf
+sudo rm /private/etc/apache2/other/interview-questions.conf.bak
 
 # update /etc/hosts
 if [ `grep -c "interview-php.dev" /etc/hosts` -eq 0 ]
