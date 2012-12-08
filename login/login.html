@@ -14,7 +14,7 @@
   2. give it some style (directions in style.css)
 -->
 
-<form method=POST action=>
+<form method=POST action=login.php>
 
   <fieldset>
     <label for=username>Username</label>
@@ -50,11 +50,14 @@ $('form').submit(function(e) {
   // lang agnostic
   url = $(this).attr('action');
   formData = $('form').serialize();
+  console.log(url, formData);
 
   $.post(
     url,
     formData,
     function(data) {
+      data = JSON.parse(data);
+      
       if (data.success) {
         $('.alert-success').show();
       } else {
