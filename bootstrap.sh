@@ -51,3 +51,7 @@ rvm use --create 1.9.3@interview-questions
 
 # install bundler and have it use the Gemfile to determine what else we need
 gem install bundler --no-rdoc --no-ri && bundle install
+
+### node
+brew update
+brew install node
