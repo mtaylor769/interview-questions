@@ -49,10 +49,11 @@ $('form').submit(function(e) {
 
   // lang agnostic
   url = $(this).attr('action');
+  formData = $('form').serialize();
 
-  .post(
+  $.post(
     url,
-    $('form').serialize(),
+    formData,
     function(data) {
       if (data.success) {
         $('.alert-success').show();
