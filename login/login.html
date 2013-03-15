@@ -2,8 +2,9 @@
 <head>
   <meta charset=utf8>
   <title>Login</title>
-</head>
+  <link rel="stylesheet" type="text/css" href="style.css">
 
+</head>
 <!-- 
   1. markup a login form
     - fields: username and password
@@ -11,8 +12,21 @@
     - a submit button
   2. give it some style (directions in style.css)
 -->
-
+<div id="content">
+	<form id="loginform">
+		<fieldset>
+			<legend>Please log in:</legend>
+			<ul>
+			<li><label for="username">Username:</label><input name="username" id="username" type="text" /></li>
+			<li><label for="password">Password:</label><input name="password" id="password" type="password" /></li>
+			<li><input name="submitbutton" id="submitbutton" type="submit" value="Log in"></li>
+			</ul>
+		</fieldset>
+	</form>
+</div>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js" charset="utf-8"></script>
 <script>
+
 /* 
 3. submit it via ajax 
 
@@ -22,18 +36,97 @@
 - http://interview-py.dev for Python
 
 */
+$(document).ready( function() {
+	// set the content height to the size of the window
+	$("#content").css("height", (window.innerHeight - 50) + "px");
+	// 
+	$(window).resize(function() {
+		$("#content").css("height", (window.innerHeight - 50) + "px");
+	}).keyup(function(e) {
+		if (e.keyCode == 13) {
+			// allow the 'Enter' key to submit the form if no alerts are showing
+			if ($(".alert-error").css("display") == "none" && $(".alert-success").css("display") == "none") {
+				$("#loginform").trigger('submit');
+			}
+		} else if (e.keyCode == 27) {
+			// ESC key will remove the alerts
+			$(".alert").css("display", "none");
+		}
+	});
+	$("#username, #password").focus(function() {
+		$(this).removeClass('error');
+	})
+	$('#loginform').submit(function(e){
+		var u = $('#username');
+		var p = $('#password');
+		var s = $('#submitbutton');
+		var err = '';
+		$(u).removeClass('error');
+		$(p).removeClass('error');
+		$(".alert").css("display", "none");
+		if ($.trim(u.val()) == "") {
+			$(u).addClass('error');
+			err += 'Please enter a username.';
+		}
+		if ($.trim(p.val()) == "") {
+			$(p).addClass('error');
+			err += (err != '') ? "\n" : "";
+			err += 'Please enter a password.';
+		}
+		if (err == '') {
+			var sd = $(this).serialize();
+			$.ajax({
+				url: "/login/login.php",
+				type: "POST",
+				data: sd,
+				dataType: "JSON"
+			}
+			).done(function(data) {
+				if (data['result'] == true) {
+					$("#userid").html(data['userid']);
+					$(".alert-success").css("display", "block");
+				} else {
+					$(".alert-error").css("display", "block");
+				}
+			});
+		} else {
+			$(".validation p span").text(err);
+			$(".validation").css("display", "block");
+		}
+		e.preventDefault();
+	});
+	$("#tryagain").click(function() {
+		$(".alert-error").css("display", "none");
+	});
+	$("#close").click(function() {
+		$(".validation").css("display", "none");
+	});
+});
 </script>
 
 <!-- 4. process in language of your choice (e.g. login.php) -->
 
 <!-- 5. display appropriate message -->
+<div class="alert alert-error validation">
+	<p>
+		<span></span>
+		<a id="close">OK</a>
+	</p>
+</div>
+
 <div class="alert alert-error">
-  <p>
-    <strong>Oops!</strong> 
-    Your username or password were incorrect.
-  </p>
+	  <p>
+	    <strong>Oops!</strong> 
+	    Your username or password were incorrect.<br>
+		<a id="tryagain">Try again</a>
+	  </p>
 </div>
 
 <div class="alert alert-success">
-  <img src=http://placedog.com/400/300 class="interview-success"/>
+	<div class="success">
+	<div class="successfloat">
+	  <img src=http://placedog.com/400/300 class="interview-success"/>
+	  <div id="message">Your user ID is <span id="userid"></span>.</div>
+	</div>
+</div>
 </div>
